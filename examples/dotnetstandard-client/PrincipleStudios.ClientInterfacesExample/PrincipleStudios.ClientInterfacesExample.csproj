@@ -19,8 +19,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<OpenApiSchemaClient Include="$(SolutionRoot)schemas\petstore.yaml" Link="Clients\Petstore\petstore.yaml" />
-		<OpenApiSchemaClient Include="$(SolutionRoot)schemas\petstore3.json" Link="Clients\Petstore3\petstore3.json" />
+	  <OpenApiSchemaClient Include="$(SolutionRoot)schemas\Shopping.yaml" Link="ApiClient\openapi.yaml" />
+		<!--<OpenApiSchemaClient Include="$(SolutionRoot)schemas\petstore.yaml" Link="Clients\Petstore\petstore.yaml" />-->
+		<!--<OpenApiSchemaClient Include="$(SolutionRoot)schemas\petstore3.json" Link="Clients\Petstore3\petstore3.json" />-->
 	</ItemGroup>
 
 

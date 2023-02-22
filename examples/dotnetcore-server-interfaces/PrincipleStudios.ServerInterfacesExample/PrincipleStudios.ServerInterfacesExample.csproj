@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<OpenApiSchemaMvcServer Include="$(SolutionRoot)schemas\petstore.yaml" Link="Controllers\petstore.yaml" />
+			<OpenApiSchemaMvcServer Include="$(SolutionRoot)schemas\Shopping.yaml" Link="Web\Controllers\openapi.yaml" />
+			<!--<OpenApiSchemaMvcServer Include="$(SolutionRoot)schemas\petstore.yaml" Link="Web\Controllers\openapi.yaml" />-->
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace PrincipleStudios.ServerInterfacesExample.Controllers
+﻿namespace PrincipleStudios.ServerInterfacesExample.Web.Controllers
 {
     internal static class Data
     {

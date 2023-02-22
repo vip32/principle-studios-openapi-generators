@@ -1,0 +1,285 @@
+openapi: '3.0.2'
+info:
+  version: 1.0.0
+  title: Shopping API
+servers:
+  - url: https://localhost:5001
+
+paths:
+  /api/v1/shopping/carts/{identity}:
+    x-dotnet-mvc-server-controller: Carts
+    summary: This resource represents a Cart in the Shopping module
+    get:
+      summary: Retrieve a cart identified by the identity
+      description: Returns a single Cart
+      tags:
+        - shopping/carts
+      operationId: GetByIdentity
+      parameters:
+        - name: identity
+          in: path
+          description: User identity
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        200:
+          description: Resource request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultOfCartDto'
+        400:
+          description: Resource request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationProblemDetails'
+        401:
+          description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        404:
+          description: Resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        500:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - Permissions.Carts.Add: []
+      # - AAA:
+      #     - "Permissions.Carts.Add" # Policy
+
+  /api/v1/shopping/carts/{identity}/items:
+    x-dotnet-mvc-server-controller: Carts
+    summary: This resource represents a CartItem in the Shopping module
+    post:
+      summary: Add an item to a cart identified by the identity
+      description: Returns a single Cart
+      tags:
+        - shopping/carts
+      operationId: AddItem
+      parameters:
+        - name: identity
+          in: path
+          description: User identity
+          required: true
+          schema:
+            type: string
+            nullable: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemDto'
+        description: The CartItem to add
+        required: true
+      responses:
+        201:
+          description: Resource was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultOfCartDto'
+        400:
+          description: Resource request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationProblemDetails'
+        401:
+          description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        404:
+          description: Resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        500:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - Permissions.Carts.Update: []
+      # - JWT:
+      #     - "Permissions.Carts.Update" # Policy
+
+  /api/v1/shopping/carts/{identity}/items/{sku}:
+    x-dotnet-mvc-server-controller: Carts
+    summary: This resource represents a CartItem with a specific SKU in the Shopping module
+    delete:
+      summary: Remove an item with a specific SKU from a cart identified by a the identity
+      description: Returns a single Cart
+      tags:
+        - shopping/carts
+      operationId: Cart-DeleteItem
+      parameters:
+        - name: identity
+          in: path
+          description: User identity
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: sku
+          in: path
+          description: Product SKU
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        204:
+          description: Resource was deleted successfully.
+        400:
+          description: Resource request was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationProblemDetails'
+        401:
+          description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        404:
+          description: Resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        500:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - Permissions.Carts.Delete: []
+      # - JWT:
+      #     - "Permissions.Carts.Delete" # Policy
+
+components:
+  schemas:
+    Result:
+      type: object
+      additionalProperties: false
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+        succeeded:
+          type: boolean
+    ProblemDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+    ValidationProblemDetails:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+        - type: object
+          additionalProperties: false
+          properties:
+            errors:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+    ResultOfCartDto:
+      allOf:
+        - $ref: '#/components/schemas/Result'
+        - type: object
+          additionalProperties: false
+          properties:
+            data:
+              nullable: true
+              type: object
+              $ref: '#/components/schemas/CartDto'
+    CartDto:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        identity:
+          type: string
+          nullable: true
+        totalPrice:
+          type: number
+          format: double
+        items:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/CartItemDto'
+    CartItemDto:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        sku:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+
+  # securitySchemes:
+  #   JWT:
+  #     type: apiKey
+  #     description: "Send the JWT token in this format - Request Header: Authorization=Bearer [access_token]"
+  #     name: Authorization
+  #     in: header
+
+security:
+  # - JWT: []
+  - Permissions.Carts.Add: []
+  - Permissions.Carts.Update: []
+  - Permissions.Carts.Delete: []

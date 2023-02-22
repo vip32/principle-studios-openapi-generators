@@ -25,15 +25,15 @@ namespace PrincipleStudios.ServerInterfacesExample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOpenApiSwaggerPetstore<
-                Controllers.PetsController
-            >();
+            services.AddOpenApiShoppingApi<Web.Controllers.CartsController>();
+
+            //services.AddOpenApiSwaggerPetstore<Web.Controllers.PetsController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UsePathBase("/api");
+            //app.UsePathBase("/api");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
